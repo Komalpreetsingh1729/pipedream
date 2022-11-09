@@ -1,0 +1,76 @@
+OCS INVENTORY INSTALLATION 
+
+STEP 1 : Prerequisites 
+1.1 update system
+sudo apt update && sudo apt upgrade -y
+
+1.2 Make sure LAMP stack (apache, MYSQL/mariaDB,PHP)installed
+
+sudo systemctl status apache2 
+sudo systemctl status mariadb
+php-v   
+
+STEP 2 Install packages required by OCS inventory server 
+2.1 install make,gcc,git& curl on the system
+sudo apt install git curl wget make cmake gcc make 
+
+2.2 install php extensions required by OCS inventory server
+sudo apt -y install php -mbstring php -xml php -mysql php -zip php -pclzip php -gd php -soap php -curl php -json libapache2 -mod -perl2 libapache2 -dbi -perl libapache -db -perl libapache2 -mod -php libarchive -zip -perl mariadb -clienr
+
+STEP 3 install and enable perl modules required by OCS server 
+3.1 install perl modules
+sudo apt -y install perl libxml-simple-perl libcompress-zlib-perl libdbi-perl libdbd-mysql-perl libnet-ip-perl libsoap-lite-perl libio-compress-perl libapache-dbi-perl  libapache2-mod-perl2 libapache2-mod-perl2-dev
+
+3.2 enable perl modules
+sudo perl -MCPAN -e 'install Apache2::SOAP'
+sudo perl -MCPAN -e 'install XML::Entities'
+sudo perl -MCPAN -e 'install Net::IP'
+sudo perl -MCPAN -e 'install Apache::DBI'
+sudo perl -MCPAN -e 'install Mojolicious'
+sudo perl -MCPAN -e 'install Switch'
+sudo perl -MCPAN -e 'install Plack::Handler'
+STEP 4 create database for OCS inventory Server 
+sudo mysql -uroot -p
+CREATE DATABASE ocs;
+GRANT ALL PRIVILEGES ON ocs.* TO ocs_user IDENTIFIED BY "strongpassword";
+FLUSH PRIVILEGES;
+EXIT
+
+STEP 5 Download OCS inventroy latest version from official website 
+5.1 Access officail website and get link to download
+wget (paste link)
+  
+STEP 6 install OCS inventory server 
+edit setup.sh script 
+sudo vim setup.sh 
+
+6.2 run setup.sh script to install ocs inventory server
+
+STEP 7 configure OCS inventory Server 
+7..1 enable apache configure for OCS inventory Server
+
+sudoln-s/etc/apache2/conf-available/ocsinventory-reports.conf/etc/apache2/conf-enabled/ocsinventory-reports.conf
+sudo ln -s /etc/apache2/conf-available/z-ocsinventory-server.conf /etc/apache2/conf-enabled/z-ocsinventory-server.conf
+sudo ln -s /etc/apache2/conf-available/zz-ocsinventory-restapi.conf /etc/apache2/conf-enabled/zz-ocsinventory-restapi.conf
+
+7.2 change the ownership of the ocsinventory-reports directory to www-data 
+sudo chown -R www-data:www-data /var/lib/ocsinventory-reports
+RESTART THE APCHE2 SERVER
+sudo systemctl restart apache2 
+ 
+
+Check ip on the server 
+on the web interface 
+ipadress/ocsreports/install.php 
+ 
+input database 
+
+for security need remote install.php file 
+sudo mv install.php install.php.bak
+
+
+
+
+
+
+
